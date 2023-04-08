@@ -30,13 +30,13 @@ void loop() {
         digitalWrite(RELAY_PIN_3, LOW);
         digitalWrite(RELAY_PIN_4, LOW);
         break;
-      case '3':
+      case '4':
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, HIGH);
         digitalWrite(RELAY_PIN_4, LOW);
         break;
-      case '4':
+      case '8':
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, LOW);
