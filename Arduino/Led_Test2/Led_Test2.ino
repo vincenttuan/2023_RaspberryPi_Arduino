@@ -1,6 +1,6 @@
 // 控制站
-const int RELAY_PIN_1 = 8;
-const int RELAY_PIN_2 = 9;
+const int RELAY_PIN_1 = 9;
+const int RELAY_PIN_2 = 10;
 const int RELAY_PIN_3 = 11;
 const int RELAY_PIN_4 = 12;
 const int SLEEP = 500;
