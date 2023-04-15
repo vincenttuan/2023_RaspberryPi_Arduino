@@ -20,31 +20,32 @@ void setup() {
 
 void loop() {
   if(Serial.available() > 0) {
-    char c = Serial.read();
-    Serial.print(c);  // 電腦顯示
+    int c = Serial.parseInt();
+    //String c = Serial.readStringUntil('\n');
+    Serial.println(c);  // 電腦顯示
     switch(c){
-      case '1':
+      case 1:
         digitalWrite(RELAY_PIN_1, HIGH);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, LOW);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case '2':
+      case 2:
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, HIGH);
         digitalWrite(RELAY_PIN_3, LOW);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case '4':
+      case 4:
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, HIGH);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case '8':
+      case 8:
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, LOW);
@@ -52,6 +53,7 @@ void loop() {
         sound();
         break;
     }
+    
   }
 }
 
