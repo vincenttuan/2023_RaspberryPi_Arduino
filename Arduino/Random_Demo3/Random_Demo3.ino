@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <SimpleDHT.h>
+#include <ezButton.h>
 
 // 设置 LiquidCrystal_I2C 对象并指定 I2C 地址
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -8,10 +9,11 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 const int pinDHT11 = 7;
 const int buttonPin = 2;
 
+ezButton button(2);
 SimpleDHT11 dht11; // DHT 11 測量溫濕度
 byte temperature = 0; // 溫度
 byte humidity = 0; // 濕度
-int buttonState = 0; // button 電壓
+boolean buttonState = 0; // button 電壓
 
 void setup() {
   Serial.begin(115200);
@@ -31,6 +33,10 @@ void setup() {
 }
 
 void loop() {
+  button.loop(); // 一定加上
+
+  if(button.isPressed())
+    buttonState = !buttonState;
   
   // 讀取溫濕度
   if (dht11.read(pinDHT11, &temperature, &humidity, NULL) == SimpleDHTErrSuccess) {
@@ -45,10 +51,8 @@ void loop() {
   }
     
   int random_num = random(0, 100); // 0~99 亂數
-  //Serial.println(random_num);
-  buttonState = digitalRead(buttonPin); // 讀取 button 電壓
   
-  if (buttonState == HIGH) {
+  if (buttonState) {
     lcd.setCursor(13, 1);
     lcd.print("OFF");
   } else {
@@ -60,12 +64,14 @@ void loop() {
     lcd.print("  ");
     lcd.setCursor(5, 1);
     lcd.print(random_num);
+
     // 傳送
     Serial.print(random_num);
     Serial.print(",");
     Serial.print((int)temperature);
     Serial.print(",");
     Serial.println((int)humidity);
+    
   }
   delay(100);
 }
