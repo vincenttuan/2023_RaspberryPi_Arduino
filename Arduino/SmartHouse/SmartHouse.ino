@@ -5,7 +5,9 @@
 #include <LiquidCrystal_I2C.h>
 #include <SimpleDHT.h>
 #include <ezButton.h>
+#include "Timer.h"
 
+Timer t;  //建立Timer物件
 // 设置 LiquidCrystal_I2C 对象并指定 I2C 地址
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -50,13 +52,13 @@ void setup() {
   lcd.setCursor(0, 1);
   lcd.print("Data:   Mode:");
   
+  // Timer 排程
+  t.every(100, rec); // 接收命令
+  t.every(100, send); // 傳送資料
 }
 
 void loop() {
-  // 接收命令
-  rec();
-  // 傳送資料
-  send();
+  t.update(); // 更新
 }
 
 void send() {
@@ -100,7 +102,7 @@ void send() {
     Serial.println((int)humidity);
     
   }
-  delay(100);
+  //delay(100);
 }
 
 void rec() {
