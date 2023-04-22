@@ -53,7 +53,7 @@ void setup() {
   lcd.print("Data:   Mode:");
   
   // Timer 排程
-  t.every(100, rec); // 接收命令
+  t.every(1, rec); // 接收命令
   t.every(100, send); // 傳送資料
 }
 
@@ -106,33 +106,35 @@ void send() {
 }
 
 void rec() {
+  
   if(Serial.available() > 0) {
-    int c = Serial.parseInt();
+    //int c = Serial.parseInt();
+    int c = Serial.read();
     //String c = Serial.readStringUntil('\n');
-    Serial.println(c);  // 電腦顯示
+    
     switch(c){
-      case 1:
+      case 49: // 1
         digitalWrite(RELAY_PIN_1, HIGH);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, LOW);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case 2:
+      case 50: // 2
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, HIGH);
         digitalWrite(RELAY_PIN_3, LOW);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case 4:
+      case 52: // 4
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, HIGH);
         digitalWrite(RELAY_PIN_4, LOW);
         sound();
         break;
-      case 8:
+      case 56: // 8
         digitalWrite(RELAY_PIN_1, LOW);
         digitalWrite(RELAY_PIN_2, LOW);
         digitalWrite(RELAY_PIN_3, LOW);
@@ -142,6 +144,7 @@ void rec() {
     }
     
   }
+  
 }
 
 void sound() {
