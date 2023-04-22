@@ -15,7 +15,26 @@ import time
 import serial
 from tkinter import font
 
+ser = ''
+
+def led1_click() :
+    send_data_to_arduino(1)
+
+def led2_click() :
+    send_data_to_arduino(2)
+
+def led3_click() :
+    send_data_to_arduino(4)
+
+def led4_click() :
+    send_data_to_arduino(8)
+
+def send_data_to_arduino(data):
+    time.sleep(1.5)
+    ser.write(str(data).encode())
+
 def rev_data_from_arduino():
+    global ser
     ser = serial.Serial('COM8', 115200)
     time.sleep(1)
     while True:
@@ -40,6 +59,7 @@ def rev_data_from_arduino():
 
 if __name__ == '__main__':
 
+
     win = tkinter.Tk()
     win.title('Smart House')
     win.geometry('700x500')
@@ -59,10 +79,10 @@ if __name__ == '__main__':
     humd_value_label = tkinter.Label(textvariable=humd_value, font=myfont)
     data_label = tkinter.Label(text='Data', font=myfont)
     data_value_label = tkinter.Label(textvariable=data_value, font=myfont)
-    led1_button = tkinter.Button(text='LED1', font=myfont)
-    led2_button = tkinter.Button(text='LED2', font=myfont)
-    led3_button = tkinter.Button(text='LED3', font=myfont)
-    led4_button = tkinter.Button(text='LED4', font=myfont)
+    led1_button = tkinter.Button(text='LED1', font=myfont, command=led1_click)
+    led2_button = tkinter.Button(text='LED2', font=myfont, command=led2_click)
+    led3_button = tkinter.Button(text='LED3', font=myfont, command=led3_click)
+    led4_button = tkinter.Button(text='LED4', font=myfont, command=led4_click)
 
     win.rowconfigure((0, 1, 2), weight=1)  # 列 0, 1, 2 同步放大與縮小
     win.columnconfigure((0, 1, 2, 3), weight=1)  # 欄 0, 1, 2, 3 同步放大與縮小
