@@ -1,3 +1,6 @@
+// Python UI: SmartHouse.py
+// https://github.com/vincenttuan/2023_RaspberryPi_Arduino/blob/main/PythonProject/SmartHouse.py
+
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <SimpleDHT.h>
