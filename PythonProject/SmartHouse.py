@@ -18,19 +18,23 @@ from tkinter import font
 ser = ''
 
 def led1_click() :
-    send_data_to_arduino(1)
+    t1 = threading.Thread(target=send_data_to_arduino, args=(1,))
+    t1.start()
 
 def led2_click() :
-    send_data_to_arduino(2)
+    t1 = threading.Thread(target=send_data_to_arduino, args=(2,))
+    t1.start()
 
 def led3_click() :
-    send_data_to_arduino(4)
+    t1 = threading.Thread(target=send_data_to_arduino, args=(4,))
+    t1.start()
 
 def led4_click() :
-    send_data_to_arduino(8)
+    t1 = threading.Thread(target=send_data_to_arduino, args=(8,))
+    t1.start()
 
 def send_data_to_arduino(data):
-    time.sleep(1.5)
+    #time.sleep(0.5)
     ser.write(str(data).encode())
 
 def rev_data_from_arduino():
