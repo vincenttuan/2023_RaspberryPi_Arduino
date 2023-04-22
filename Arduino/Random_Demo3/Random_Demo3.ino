@@ -7,7 +7,6 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 const int pinDHT11 = 7;
-const int buttonPin = 2;
 
 ezButton button(2);
 SimpleDHT11 dht11; // DHT 11 測量溫濕度
@@ -15,8 +14,26 @@ byte temperature = 0; // 溫度
 byte humidity = 0; // 濕度
 boolean buttonState = 0; // button 電壓
 
+// 蜂鳴器
+const int BUZEER_PIN = 8;
+// 控制站
+const int RELAY_PIN_1 = 9;
+const int RELAY_PIN_2 = 10;
+const int RELAY_PIN_3 = 11;
+const int RELAY_PIN_4 = 12;
+// 休息
+const int SLEEP = 500;
+const int BUZEER_SLEEP = 100;
+
 void setup() {
   Serial.begin(115200);
+  
+  pinMode(RELAY_PIN_1, OUTPUT);
+  pinMode(RELAY_PIN_2, OUTPUT);
+  pinMode(RELAY_PIN_3, OUTPUT);
+  pinMode(RELAY_PIN_4, OUTPUT);
+  pinMode(BUZEER_PIN, OUTPUT);
+
   randomSeed(analogRead(0)); // 隨機種子
   
   // 初始化 I2C 总线
@@ -33,6 +50,13 @@ void setup() {
 }
 
 void loop() {
+  // 接收命令
+  rec();
+  // 傳送資料
+  send();
+}
+
+void send() {
   button.loop(); // 一定加上
 
   if(button.isPressed())
@@ -75,3 +99,49 @@ void loop() {
   }
   delay(100);
 }
+
+void rec() {
+  if(Serial.available() > 0) {
+    int c = Serial.parseInt();
+    //String c = Serial.readStringUntil('\n');
+    Serial.println(c);  // 電腦顯示
+    switch(c){
+      case 1:
+        digitalWrite(RELAY_PIN_1, HIGH);
+        digitalWrite(RELAY_PIN_2, LOW);
+        digitalWrite(RELAY_PIN_3, LOW);
+        digitalWrite(RELAY_PIN_4, LOW);
+        sound();
+        break;
+      case 2:
+        digitalWrite(RELAY_PIN_1, LOW);
+        digitalWrite(RELAY_PIN_2, HIGH);
+        digitalWrite(RELAY_PIN_3, LOW);
+        digitalWrite(RELAY_PIN_4, LOW);
+        sound();
+        break;
+      case 4:
+        digitalWrite(RELAY_PIN_1, LOW);
+        digitalWrite(RELAY_PIN_2, LOW);
+        digitalWrite(RELAY_PIN_3, HIGH);
+        digitalWrite(RELAY_PIN_4, LOW);
+        sound();
+        break;
+      case 8:
+        digitalWrite(RELAY_PIN_1, LOW);
+        digitalWrite(RELAY_PIN_2, LOW);
+        digitalWrite(RELAY_PIN_3, LOW);
+        digitalWrite(RELAY_PIN_4, HIGH);
+        sound();
+        break;
+    }
+    
+  }
+}
+
+void sound() {
+    digitalWrite(BUZEER_PIN, HIGH);                       // 蜂鳴器 開
+    delay(BUZEER_SLEEP);                                     // 發音時間
+    digitalWrite(BUZEER_PIN, LOW);                        // 蜂鳴器 關
+}
+
