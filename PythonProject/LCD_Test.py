@@ -22,7 +22,7 @@ def lcd_write(message):
     message = [ord(i) for i in message]
     # 寫入字元陣列
     for i in message:
-        bus.write_byte_data(addr, 0x40, i)
+        bus.write_byte_data(addr, 0x40, i)  # 0x40 第一列, 0x41 第二列
 
 # 清除 LED 顯示器的內容
 def lcd_clear():
