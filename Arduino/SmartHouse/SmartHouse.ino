@@ -50,7 +50,7 @@ void setup() {
   lcd.setCursor(0, 0);
   lcd.print("TEMP:   HUMD:");
   lcd.setCursor(0, 1);
-  lcd.print("Data:   Mode:");
+  lcd.print("Data:   ");
   
   // Timer 排程
   t.every(1, rec); // 接收命令
@@ -82,26 +82,46 @@ void send() {
   int random_num = random(0, 100); // 0~99 亂數
   
   if (buttonState) {
-    lcd.setCursor(13, 1);
+    lcd.setCursor(8, 1);
     lcd.print("OFF");
   } else {
-    lcd.setCursor(13, 1);
-    lcd.print("   ");
-    lcd.setCursor(13, 1);
-    lcd.print("ON");
     lcd.setCursor(5, 1);
     lcd.print("  ");
     lcd.setCursor(5, 1);
     lcd.print(random_num);
 
+    lcd.setCursor(8, 1);
+    lcd.print("   ");
+    lcd.setCursor(8, 1);
+    lcd.print("ON");
+    
     // 傳送
     Serial.print(random_num);
     Serial.print(",");
     Serial.print((int)temperature);
     Serial.print(",");
-    Serial.println((int)humidity);
+    Serial.print((int)humidity);
+    Serial.print(",");
+    Serial.print(digitalRead(RELAY_PIN_1));
+    Serial.print(",");
+    Serial.print(digitalRead(RELAY_PIN_2));
+    Serial.print(",");
+    Serial.print(digitalRead(RELAY_PIN_3));
+    Serial.print(",");
+    Serial.println(digitalRead(RELAY_PIN_4));
     
   }
+
+  // Relay 狀態
+  lcd.setCursor(12, 1);
+  lcd.print(digitalRead(RELAY_PIN_1));
+  lcd.setCursor(13, 1);
+  lcd.print(digitalRead(RELAY_PIN_2));
+  lcd.setCursor(14, 1);
+  lcd.print(digitalRead(RELAY_PIN_3));
+  lcd.setCursor(15, 1);
+  lcd.print(digitalRead(RELAY_PIN_4));
+  
   //delay(100);
 }
 
