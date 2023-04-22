@@ -17,8 +17,19 @@ import threading
 import time
 import serial
 from tkinter import font
+import time
+from RPLCD.i2c import CharLCD
 
 ser = ''
+data = ''
+
+def lcd_display():
+    lcd = CharLCD('PCF8574', address=0x27, port=1, backlight_enabled=True)
+    lcd.clear()
+    while True:
+        lcd.cursor_pos = (0, 0)
+        lcd.write_string(data)
+        time.sleep(0.2)
 
 def led1_click() :
     t1 = threading.Thread(target=send_data_to_arduino, args=(1,))
@@ -42,11 +53,12 @@ def send_data_to_arduino(data):
 
 def rev_data_from_arduino():
     global ser
-    ser = serial.Serial('COM8', 115200)
+    ser = serial.Serial('/dev/ttyACM0', 115200)
     time.sleep(1)
     while True:
         try:
             if ser.in_waiting > 0:
+                global data
                 data = ser.readline().decode().rstrip()
                 print("收到 arduino 的資料:", data)
                 dataArray = data.split(",")
@@ -138,9 +150,13 @@ if __name__ == '__main__':
     led3_button.grid(row=2, column=2, sticky='EWNS')
     led4_button.grid(row=2, column=3, sticky='EWNS')
 
-    # 啟動一條執行緒去執行
+    # 啟動一條執行緒去執行(接收 Arduino)
     t1 = threading.Thread(target=rev_data_from_arduino)
     t1.start()
+
+    # 啟動一條執行緒去執行(LCD 顯示)
+    t2 = threading.Thread(target=lcd_display)
+    t2.start()
 
     win.mainloop()
 
