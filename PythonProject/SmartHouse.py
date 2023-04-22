@@ -7,6 +7,9 @@ GUI
 +------+------+------+------+
 | LED1 | LED2 | LED3 | LED3 |
 +------+------+------+------+
+
+Arduino: SmartHouse.ino
+https://github.com/vincenttuan/2023_RaspberryPi_Arduino/blob/main/Arduino/SmartHouse/SmartHouse.ino
 '''
 
 import tkinter
