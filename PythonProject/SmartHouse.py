@@ -15,10 +15,13 @@ https://github.com/vincenttuan/2023_RaspberryPi_Arduino/blob/main/Arduino/SmartH
 import tkinter
 import threading
 import time
+import requests
 import serial
 from tkinter import font
 import time
 from RPLCD.i2c import CharLCD
+import json
+import socket
 
 ser = ''
 data = ''
@@ -26,10 +29,27 @@ data = ''
 def lcd_display():
     lcd = CharLCD('PCF8574', address=0x27, port=1, backlight_enabled=True)
     lcd.clear()
+
+    # 顯示 IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    lcd.cursor_pos = (1, 0)
+    lcd.write_string(ip)
+
     while True:
         lcd.cursor_pos = (0, 0)
         lcd.write_string(data)
         time.sleep(0.2)
+
+def upload_firebase():
+    while True:
+        firebase_url = 'https://你的FB.firebaseio.com/'
+        upload_data = {'data': data}
+        result = requests.put(firebase_url + '/raspberry.json', verify=True, data=json.dumps(upload_data))
+        print(result)
+        time.sleep(1)
+
 
 def led1_click() :
     t1 = threading.Thread(target=send_data_to_arduino, args=(1,))
@@ -157,6 +177,10 @@ if __name__ == '__main__':
     # 啟動一條執行緒去執行(LCD 顯示)
     t2 = threading.Thread(target=lcd_display)
     t2.start()
+
+    # 啟動一條執行緒去執行(上傳到 Firebase)
+    t3 = threading.Thread(target=upload_firebase)
+    t3.start()
 
     win.mainloop()
 
