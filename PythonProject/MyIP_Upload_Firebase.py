@@ -8,7 +8,7 @@ ip = s.getsockname()[0]
 
 print(ip)
 
-firebase_url = 'https://iotfb-fc0b9.firebaseio.com/'
+firebase_url = 'https://你的FB.firebaseio.com/'
 data = {'ip':ip}
 result = requests.put(firebase_url + '/raspberry.json', verify=True, data=json.dumps(data))
 print(result)
