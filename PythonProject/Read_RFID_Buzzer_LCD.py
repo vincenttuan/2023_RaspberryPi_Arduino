@@ -24,9 +24,10 @@ try:
         # 顯示在 LCD 螢幕上
         lcd.cursor_pos = (0, 0)
         lcd.write_string(text)
-        
+
         time.sleep(0.1)
         GPIO.output(buzzer_pin, GPIO.LOW)
         time.sleep(0.1)  # 在讀取到卡片後等待一段時間
 finally:
     GPIO.cleanup()
+
