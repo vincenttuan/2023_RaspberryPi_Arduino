@@ -8,7 +8,8 @@ Mac OS：使用 Homebrew 安裝 Mosquitto：
 打開 Terminal，然後輸入以下命令安裝 Mosquitto：
 brew install mosquitto
 對於 Mac OS，打開 Terminal，然後輸入以下命令：
-mosquitto
+mosquitto 或 /usr/local/sbin/mosquitto
+關閉 MQTT: brew services stop mosquitto
 
 Windows：請按照官方網站的說明下載和安裝 Mosquitto：https://mosquitto.org/download/
 安裝完成後，您可以啟動 Mosquitto 服務器。
