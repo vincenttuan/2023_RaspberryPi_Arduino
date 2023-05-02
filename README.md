@@ -58,5 +58,22 @@ except KeyboardInterrupt:
 # Stop the loop and disconnect
 client.loop_stop()
 client.disconnect()
+</pre>
+允許其他電腦連接到 Mosquitto MQTT
+<pre>
+要允許其他電腦（具有不同 IP 地址）連接到 Mosquitto MQTT 代理，您需要創建一個配置文件，並在其中定義一個監聽器，以便允許遠程訪問。請按照以下步驟操作：
+在 /usr/local/etc/mosquitto 目錄下（或您選擇的其他位置）創建一個名為 mosquitto.conf 的文件。
+使用文本編輯器打開 mosquitto.conf，然後添加以下行以定義一個監聽器：
+
+listener 1883
+allow_anonymous true
+
+這將允許 MQTT 代理在端口 1883 上監聽所有接入的連接，並允許匿名連接。為了安全起見，您可以考慮使用身份驗證和加密，而不是允許匿名連接。有關如何配置身份驗證和加密的更多信息，請查看 Mosquitto 文檔。
+保存並關閉 mosquitto.conf 文件。
+停止當前運行的 Mosquitto 實例（如果有的話）。您可以使用以下命令停止它：
+使用新的配置文件重新啟動 Mosquitto：
+/usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
+
+現在，您的 Mosquitto MQTT 代理應該允許來自具有不同 IP 地址的其他電腦的連接。請注意，您需要確保您的網絡防火牆允許流量通過端口 1883。
 
 </pre>
