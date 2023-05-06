@@ -11,6 +11,10 @@ GPIO.setmode(GPIO.BOARD)  # GPIO.BOARD, 使用BOARD模式
 # Servo 每次啟動費用 ----------------------------------------------------
 FEE = 10  # 每次費用
 
+# LED PIN -------------------------------------------------------------
+led_pin = 38  # 用於 Servo 啟動時燈會亮
+GPIO.setup(led_pin, GPIO.OUT)
+
 # RFID 卡片前二碼 -------------------------------------------------------
 CARD_ID_1 = "55"
 CARD_ID_2 = "10"
@@ -63,7 +67,10 @@ def rfid_play():
 
             # 若 leadId == 指定 CARD_ID 才需要寫入
             if leadId == CARD_ID_1 or leadId == CARD_ID_2:
-                reader.write(str(count))  # 將累積次數寫入到卡片
+                try:
+                    reader.write(str(count))  # 將累積次數寫入到卡片
+                except:
+                    pass
 
             # 顯示在 LCD 螢幕上
             lcd.cursor_pos = (0, 0)
@@ -130,10 +137,14 @@ def servo_play_and_lcd_update(leadId):
         lcd.cursor_pos = (1, 10)
         lcd.write_string("OFF")
 def servo1_play():
+    # 開燈
+    GPIO.output(led_pin, GPIO.HIGH)
     # 旋轉伺服馬達
     set_angle1(95)  # 開門
     time.sleep(3)  # 停 3 秒
     set_angle1(5)  # 關門
+    # 關燈
+    GPIO.output(led_pin, GPIO.LOW)
 
 def servo2_play():
     # 旋轉伺服馬達
