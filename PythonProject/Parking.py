@@ -8,6 +8,9 @@ from RPLCD.i2c import CharLCD
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)  # GPIO.BOARD, 使用BOARD模式
 
+# Servo 每次啟動費用 ----------------------------------------------------
+FEE = 10  # 每次費用
+
 # RFID 卡片前二碼 -------------------------------------------------------
 CARD_ID_1 = "55"
 CARD_ID_2 = "10"
@@ -27,6 +30,10 @@ pwm2.start(0)
 reader = SimpleMFRC522()
 lcd = CharLCD('PCF8574', address=0x27, port=1, backlight_enabled=True)
 lcd.clear()  # LCD 清空
+lcd.cursor_pos = (0, 0)
+lcd.write_string("ID:   N:   $:    ")
+lcd.cursor_pos = (1, 0)
+lcd.write_string("S1:    S2:    ")
 
 # 設置蜂鳴器引腳和模式 ----------------------------------------------------
 buzzer_pin = 12  # 根據BOARD模式，將BCM 18對應的引腳更改為12
@@ -42,22 +49,38 @@ def rfid_play():
         while True:
             print("請將卡靠近讀卡器...")
             GPIO.output(buzzer_pin, GPIO.LOW)
+            # 首次讀取卡片資料
             id, text = reader.read()
             GPIO.output(buzzer_pin, GPIO.HIGH)
             print("ID: %s\nText: %s" % (id, text))
             leadId = str(id)[0:2]  # 取 RFID 的卡片 ID 前二碼
+
+            count = 1  # 卡片記錄預設資料
+            try:
+                count = int(text) + 1  # 將卡片內容取出後 +1
+            except:
+                pass
+
+            # 若 leadId == 指定 CARD_ID 才需要寫入
+            if leadId == CARD_ID_1 or leadId == CARD_ID_2:
+                reader.write(str(count))  # 將累積次數寫入到卡片
+
             # 顯示在 LCD 螢幕上
             lcd.cursor_pos = (0, 0)
-            lcd.write_string("ID:%s" % leadId)
+            lcd.write_string("ID:   N:   $:    ")
+            lcd.cursor_pos = (0, 3)
+            lcd.write_string("%s" % leadId)
+            lcd.cursor_pos = (0, 8)
+            lcd.write_string("%d" % count)
+            lcd.cursor_pos = (0, 13)
+            lcd.write_string("%d" % (count * FEE))
+
             time.sleep(0.1)
             GPIO.output(buzzer_pin, GPIO.LOW)
             time.sleep(0.1)  # 在讀取到卡片後等待一段時間
 
-            # 啟動 Servo
-            if leadId == CARD_ID_1:
-                servo1_play()
-            elif leadId == CARD_ID_2:
-                servo2_play()
+            # 啟動 Servo & 更新 Servo 在 LCD 上的狀態
+            servo_play_and_lcd_update(leadId)
 
     finally:
         GPIO.cleanup()
@@ -71,7 +94,8 @@ def button_play():
         # print(button_state)
         if button_state == 0:
             lcd.cursor_pos = (0, 0)
-            lcd.write_string("                ")
+            lcd.write_string("ID:   N:   $:    ")
+
 
 # 設定 Servo 1 角度
 def set_angle1(angle):
@@ -91,6 +115,20 @@ def set_angle2(angle):
     GPIO.output(servo2_pin, False)
     pwm2.ChangeDutyCycle(0)
 
+
+def servo_play_and_lcd_update(leadId):
+    if leadId == CARD_ID_1:
+        lcd.cursor_pos = (1, 3)
+        lcd.write_string("ON ")
+        servo1_play()  # 啟動 Servo1
+        lcd.cursor_pos = (1, 3)
+        lcd.write_string("OFF")
+    elif leadId == CARD_ID_2:
+        lcd.cursor_pos = (1, 10)
+        lcd.write_string("ON ")
+        servo2_play()  # 啟動 Servo2
+        lcd.cursor_pos = (1, 10)
+        lcd.write_string("OFF")
 def servo1_play():
     # 旋轉伺服馬達
     set_angle1(95)  # 開門
