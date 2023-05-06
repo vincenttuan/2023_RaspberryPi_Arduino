@@ -124,6 +124,8 @@ def set_angle2(angle):
 
 
 def servo_play_and_lcd_update(leadId):
+    # 開燈
+    GPIO.output(led_pin, GPIO.HIGH)
     if leadId == CARD_ID_1:
         lcd.cursor_pos = (1, 3)
         lcd.write_string("ON ")
@@ -136,15 +138,14 @@ def servo_play_and_lcd_update(leadId):
         servo2_play()  # 啟動 Servo2
         lcd.cursor_pos = (1, 10)
         lcd.write_string("OFF")
+    # 關燈
+    GPIO.output(led_pin, GPIO.LOW)
+
+
 def servo1_play():
-    # 開燈
-    GPIO.output(led_pin, GPIO.HIGH)
-    # 旋轉伺服馬達
     set_angle1(95)  # 開門
     time.sleep(3)  # 停 3 秒
     set_angle1(5)  # 關門
-    # 關燈
-    GPIO.output(led_pin, GPIO.LOW)
 
 def servo2_play():
     # 旋轉伺服馬達
