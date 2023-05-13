@@ -15,6 +15,14 @@ FEE = 10  # 每次費用
 led_pin = 38  # 用於 Servo 啟動時燈會亮
 GPIO.setup(led_pin, GPIO.OUT)
 
+# Traffic Light (紅綠燈) PIN -------------------------------------------------------------
+red_pin = 33  # 紅燈
+GPIO.setup(red_pin, GPIO.OUT)
+yellow_pin = 35  # 黃燈
+GPIO.setup(yellow_pin, GPIO.OUT)
+green_pin = 37  # 綠燈
+GPIO.setup(green_pin, GPIO.OUT)
+
 # RFID 卡片前二碼 -------------------------------------------------------
 CARD_ID_1 = "55"
 CARD_ID_2 = "10"
@@ -47,6 +55,24 @@ GPIO.setup(buzzer_pin, GPIO.OUT)
 button_pin = 40
 GPIO.setup(button_pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
+
+def traffic_light_play():
+    while True:
+        # 綠燈亮 10 秒
+        GPIO.output(green_pin, GPIO.HIGH)
+        GPIO.output(yellow_pin, GPIO.LOW)
+        GPIO.output(red_pin, GPIO.LOW)
+        time.sleep(10)
+        # 黃燈亮 2 秒
+        GPIO.output(green_pin, GPIO.LOW)
+        GPIO.output(yellow_pin, GPIO.HIGH)
+        GPIO.output(red_pin, GPIO.LOW)
+        time.sleep(2)
+        # 紅燈亮 10 秒
+        GPIO.output(green_pin, GPIO.LOW)
+        GPIO.output(yellow_pin, GPIO.LOW)
+        GPIO.output(red_pin, GPIO.HIGH)
+        time.sleep(10)
 
 def rfid_play():
     try:
@@ -160,5 +186,8 @@ if __name__ == '__main__':
     t1.start()
     t2 = threading.Thread(target=button_play)
     t2.start()
+    # 紅綠燈執行緒
+    t3 = threading.Thread(target=traffic_light_play)
+    t3.start()
 
 
