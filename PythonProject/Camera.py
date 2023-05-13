@@ -1,8 +1,13 @@
 '''
-安裝
+PC 安裝
 pip install opencv-python
 pip install opencv-python-headless # 若您需要在沒有GUI的環境中使用 opencv
 pip install pillow
+樹梅派安裝
+sudo apt update
+sudo apt install python3-opencv
+pip install pillow
+sudo apt-get install python3-pil.imagetk
 '''
 import cv2
 import tkinter as tk
