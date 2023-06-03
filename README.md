@@ -81,3 +81,17 @@ allow_anonymous true
 現在，您的 Mosquitto MQTT 代理應該允許來自具有不同 IP 地址的其他電腦的連接。請注意，您需要確保您的網絡防火牆允許流量通過端口 1883。
 
 </pre>
+
+# OpenCV
+<pre>
+一、安裝 PIL :
+pip install pillow
+
+二、安裝 py-opencv :
+2.1、反安裝(若之前有其他本):
+     pip uninstall opencv-contrib-python
+     pip uninstall opencv-python
+2.2、再安裝:
+     pip install opencv-python
+     pip install opencv-contrib-python
+</pre>
