@@ -2,7 +2,7 @@ import requests
 import json
 
 def change_face_id(msg):
-    firebase_url = 'https://iotfb-fc0b9.firebaseio.com/'
+    firebase_url = 'https://你的.firebaseio.com/'
     data = {'faceid':msg}
     result = requests.put(firebase_url + '/opencv.json', verify=True, data=json.dumps(data))
     print(result)
