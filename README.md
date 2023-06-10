@@ -85,7 +85,7 @@ allow_anonymous true
 解決 MQTT Server 允許外部裝置連入本機Mosquitto伺服器的辦法
 <a href="https://swf.com.tw/?p=1473">https://swf.com.tw/?p=1473</a>
 
-mosquitto.conf
+C:\Program Files\mosquitto\mosquitto.conf
 allow_anonymous true
 listener 1883 192.168.1.157 # 本機ip
 
