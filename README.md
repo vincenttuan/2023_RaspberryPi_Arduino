@@ -79,6 +79,18 @@ allow_anonymous true
 /usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
 
 現在，您的 Mosquitto MQTT 代理應該允許來自具有不同 IP 地址的其他電腦的連接。請注意，您需要確保您的網絡防火牆允許流量通過端口 1883。
+</pre>
+# 解決 MQTT Server 允許外部裝置連入本機Mosquitto伺服器的辦法
+<pre>
+解決 MQTT Server 允許外部裝置連入本機Mosquitto伺服器的辦法
+https://swf.com.tw/?p=1473
+
+mosquitto.conf
+allow_anonymous true
+listener 1883 192.168.1.157 # 本機ip
+
+MQTT-Server 啟動指令
+mosquitto -c mosquitto.conf -v
 
 </pre>
 
