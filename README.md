@@ -83,7 +83,7 @@ allow_anonymous true
 # 解決 MQTT Server 允許外部裝置連入本機Mosquitto伺服器的辦法
 <pre>
 解決 MQTT Server 允許外部裝置連入本機Mosquitto伺服器的辦法
-https://swf.com.tw/?p=1473
+<a href="https://swf.com.tw/?p=1473">https://swf.com.tw/?p=1473</a>
 
 mosquitto.conf
 allow_anonymous true
